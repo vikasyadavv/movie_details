@@ -1,0 +1,238 @@
+# 🎬 Enhanced iPhone Movie Shortcut - Complete Data Guide
+
+## 📊 All Available Movie Information from OMDb API
+
+### 🎯 Basic Info (Currently Used)
+- ✅ **Title** - Movie name
+- ✅ **Year** - Release year
+- ✅ **imdbRating** - IMDB score (1-10)
+- ✅ **imdbVotes** - Number of IMDB votes
+- ✅ **Genre** - Movie genres
+- ✅ **Runtime** - Duration in minutes
+- ✅ **Director** - Director name
+- ✅ **Plot** - Movie description
+
+### 🆕 Additional Information You Can Add
+
+#### 📽️ **Production Details**
+- **Writer** - Screenplay writers
+- **Actors** - Main cast (first 3-4 actors)
+- **Production** - Production company
+- **Country** - Country of origin
+- **Language** - Primary language
+
+#### 🏆 **Ratings & Awards**
+- **Rated** - MPAA rating (PG, PG-13, R, etc.)
+- **Metascore** - Metacritic score (0-100)
+- **Awards** - Oscar wins, nominations, etc.
+- **Ratings** - Multiple rating sources (IMDB, Rotten Tomatoes, Metacritic)
+
+#### 💰 **Box Office & Release**
+- **Released** - Release date
+- **BoxOffice** - Box office earnings
+- **DVD** - DVD release date
+- **Website** - Official website
+
+#### 🖼️ **Visual Content**
+- **Poster** - Movie poster URL
+- **Type** - Content type (movie, series, episode)
+
+#### 🔗 **Technical Details**
+- **imdbID** - IMDB identifier
+- **Response** - API success status
+
+## 🚀 Enhanced Shortcut Versions
+
+### 📱 **Version 2: Extended Info**
+Add these "Get Value for" actions to your current shortcut:
+
+```
+Dictionary Key: "Writer" → Variable: Writer
+Dictionary Key: "Actors" → Variable: Actors  
+Dictionary Key: "Rated" → Variable: Rated
+Dictionary Key: "Released" → Variable: Released
+Dictionary Key: "Awards" → Variable: Awards
+Dictionary Key: "BoxOffice" → Variable: BoxOffice
+Dictionary Key: "Metascore" → Variable: Metascore
+Dictionary Key: "Country" → Variable: Country
+Dictionary Key: "Language" → Variable: Language
+```
+
+#### Enhanced Format Text:
+```
+🎬 [Title] ([Year]) - [Rated]
+
+⭐ IMDB: [Rating]/10 ([Votes] votes)
+📊 Metacritic: [Metascore]/100
+🎭 Genre: [Genre]
+⏱️ Runtime: [Runtime]
+
+👥 Cast: [Actors]
+🎬 Director: [Director]
+✍️ Writer: [Writer]
+
+🌍 Country: [Country]
+🗣️ Language: [Language]
+📅 Released: [Released]
+💰 Box Office: [BoxOffice]
+
+🏆 Awards: [Awards]
+
+📖 Plot:
+[Plot]
+```
+
+### 📱 **Version 3: Poster Display**
+For iOS 14+, you can display the movie poster:
+
+1. **Add "Get Value for" action**:
+   - Dictionary Key: `Poster`
+   - Variable Name: `PosterURL`
+
+2. **Add "Get Contents of URL" action**:
+   - URL: Use `PosterURL` variable
+   - Variable Name: `PosterImage`
+
+3. **Add "Quick Look" action**:
+   - Input: `PosterImage`
+
+### 📱 **Version 4: Multiple Ratings**
+The `Ratings` field contains an array with multiple rating sources:
+
+1. **Add "Get Value for" action**:
+   - Dictionary Key: `Ratings`
+   - Variable Name: `AllRatings`
+
+2. **Add "Get Item from List" actions** for each rating:
+   - Item 1: IMDB rating
+   - Item 2: Rotten Tomatoes rating  
+   - Item 3: Metacritic rating
+
+## 🎯 Specialized Shortcut Ideas
+
+### 🏆 **Award-Focused Version**
+Perfect for award season or classic movies:
+```
+🎬 [Title] ([Year])
+
+🏆 AWARDS: [Awards]
+⭐ IMDB: [Rating]/10
+📊 Metacritic: [Metascore]/100
+🎭 [Genre] | ⏱️ [Runtime]
+
+📖 [Plot]
+```
+
+### 💰 **Box Office Version**
+Great for tracking commercial success:
+```
+🎬 [Title] ([Year])
+
+💰 Box Office: [BoxOffice]
+⭐ Rating: [Rating]/10 ([Votes] votes)
+🎭 [Genre] | ⏱️ [Runtime]
+📅 Released: [Released]
+
+👥 Starring: [Actors]
+🎬 Directed by: [Director]
+```
+
+### 🎭 **Cast & Crew Version**
+Focus on people behind the movie:
+```
+🎬 [Title] ([Year])
+
+🎬 Director: [Director]
+✍️ Writer: [Writer]
+👥 Stars: [Actors]
+
+⭐ [Rating]/10 | 🎭 [Genre]
+🌍 [Country] | 🗣️ [Language]
+
+📖 [Plot]
+```
+
+## 📋 **Copy-Paste Dictionary Keys**
+
+For quick setup, here are all available dictionary keys:
+
+### Core Information
+```
+Title, Year, Rated, Released, Runtime, Genre, Director, Writer, Actors, Plot
+```
+
+### Ratings & Reviews  
+```
+imdbRating, imdbVotes, imdbID, Metascore, Awards
+```
+
+### Production & Technical
+```
+Language, Country, Production, Website, Type, DVD, BoxOffice
+```
+
+### Visual & Media
+```
+Poster, Ratings, Response
+```
+
+## 🛠️ **Advanced Features You Can Add**
+
+### 🔍 **Search by IMDB ID**
+Change API URL to: `http://www.omdbapi.com/?apikey=KEY&i=IMDBID`
+
+### 📺 **TV Series Support**
+The API also supports TV series - just search for show names!
+
+### 🎯 **Year-Specific Search**
+Add year parameter: `http://www.omdbapi.com/?apikey=KEY&t=TITLE&y=YEAR`
+
+### 📄 **Full Plot**
+For longer plot: `http://www.omdbapi.com/?apikey=KEY&t=TITLE&plot=full`
+
+## 🎨 **Formatting Ideas**
+
+### 🌟 **Emoji Rating System**
+```
+⭐⭐⭐⭐⭐ (9.0/10) - Masterpiece
+⭐⭐⭐⭐ (8.0/10) - Excellent  
+⭐⭐⭐ (7.0/10) - Good
+⭐⭐ (6.0/10) - Average
+⭐ (5.0/10) - Poor
+```
+
+### 🎯 **Rating Color Coding**
+- 🟢 9.0+ (Masterpiece)
+- 🟡 7.0-8.9 (Great)
+- 🟠 5.0-6.9 (Average)
+- 🔴 <5.0 (Poor)
+
+## 📱 **Shortcut Variations**
+
+### 🎬 **Quick Info** (Current Version)
+Basic info for fast lookup
+
+### 🎭 **Detailed Info** (Enhanced Version)
+Full cast, crew, and production details
+
+### 🏆 **Awards Focus**
+Emphasis on awards and critical reception
+
+### 💰 **Commercial Focus**
+Box office, budget, and commercial performance
+
+### 📸 **Visual Focus**
+Includes poster image display
+
+### 📊 **Ratings Comparison**
+Shows IMDB, Rotten Tomatoes, and Metacritic scores
+
+## 🚀 **Pro Tips**
+
+1. **Create Multiple Shortcuts** for different use cases
+2. **Use Shortcuts Folders** to organize movie-related shortcuts
+3. **Add to Widget** for quick access
+4. **Share with Friends** via AirDrop or iCloud
+5. **Backup Shortcuts** to iCloud for safety
+
+Would you like me to help you implement any of these enhanced versions?

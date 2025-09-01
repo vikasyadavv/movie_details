@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Movie Shortcut - Implementation Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .version-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .version-card {
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .version-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .version-card.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .version-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .version-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .complexity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .basic { background: #d4edda; color: #155724; }
+        .intermediate { background: #fff3cd; color: #856404; }
+        .advanced { background: #f8d7da; color: #721c24; }
+        
+        .implementation {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .implementation.active {
+            display: block;
+        }
+        
+        .step-list {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .step-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        
+        .dictionary-keys {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .key-name {
+            color: #9cdcfe;
+            font-weight: bold;
+        }
+        
+        .output-preview {
+            background: #f0f8ff;
+            border: 2px dashed #667eea;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-line;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .pro-tip {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 Enhanced Movie Shortcut</h1>
+            <h2>Complete Implementation Guide</h2>
+        </div>
+        
+        <div class="content">
+            <div class="version-selector">
+                <div class="version-card active" onclick="showVersion('basic')">
+                    <div class="version-title">🎯 Basic Plus</div>
+                    <div class="version-description">Your current setup + a few key additions</div>
+                    <span class="complexity-badge basic">Easy</span>
+                </div>
+                
+                <div class="version-card" onclick="showVersion('detailed')">
+                    <div class="version-title">🎭 Detailed Info</div>
+                    <div class="version-description">Complete cast, crew, and production details</div>
+                    <span class="complexity-badge intermediate">Medium</span>
+                </div>
+                
+                <div class="version-card" onclick="showVersion('visual')">
+                    <div class="version-title">📸 Visual Enhanced</div>
+                    <div class="version-description">Includes movie poster display</div>
+                    <span class="complexity-badge advanced">Advanced</span>
+                </div>
+                
+                <div class="version-card" onclick="showVersion('ratings')">
+                    <div class="version-title">📊 Ratings Focus</div>
+                    <div class="version-description">Multiple rating sources comparison</div>
+                    <span class="complexity-badge intermediate">Medium</span>
+                </div>
+            </div>
+            
+            <!-- Basic Plus Implementation -->
+            <div class="implementation active" id="basic">
+                <h3>🎯 Basic Plus Version - Add These Fields</h3>
+                
+                <div class="step-list">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <strong>Add More "Get Value for" Actions</strong>
+                        <div class="dictionary-keys">
+Dictionary Key: "<span class="key-name">Rated</span>" → Variable: Rated (PG, PG-13, R, etc.)
+Dictionary Key: "<span class="key-name">Released</span>" → Variable: Released (Release date)
+Dictionary Key: "<span class="key-name">Actors</span>" → Variable: Actors (Main cast)
+Dictionary Key: "<span class="key-name">BoxOffice</span>" → Variable: BoxOffice (Earnings)</div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <strong>Update Your Text Format</strong>
+                        <div class="output-preview">🎬 The Dark Knight (2008) - PG-13
+
+⭐ IMDB Rating: 9.0/10
+👥 Votes: 2,743,876
+🎭 Genre: Action, Crime, Drama
+⏱️ Runtime: 152 min
+🎬 Director: Christopher Nolan
+
+👥 Starring: Christian Bale, Heath Ledger, Aaron Eckhart
+📅 Released: 18 Jul 2008
+💰 Box Office: $534,987,076
+
+📖 Description:
+When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.</div>
+                    </div>
+                </div>
+                
+                <div class="pro-tip">
+                    <strong>💡 Pro Tip:</strong> This version adds the most useful information without making the shortcut too complex. Perfect for most users!
+                </div>
+            </div>
+            
+            <!-- Detailed Implementation -->
+            <div class="implementation" id="detailed">
+                <h3>🎭 Detailed Info Version - Maximum Information</h3>
+                
+                <div class="step-list">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <strong>Add ALL Available Data Fields</strong>
+                        <div class="dictionary-keys">
+Dictionary Key: "<span class="key-name">Writer</span>" → Variable: Writer
+Dictionary Key: "<span class="key-name">Actors</span>" → Variable: Actors
+Dictionary Key: "<span class="key-name">Rated</span>" → Variable: Rated
+Dictionary Key: "<span class="key-name">Released</span>" → Variable: Released
+Dictionary Key: "<span class="key-name">Awards</span>" → Variable: Awards
+Dictionary Key: "<span class="key-name">BoxOffice</span>" → Variable: BoxOffice
+Dictionary Key: "<span class="key-name">Metascore</span>" → Variable: Metascore
+Dictionary Key: "<span class="key-name">Country</span>" → Variable: Country
+Dictionary Key: "<span class="key-name">Language</span>" → Variable: Language
+Dictionary Key: "<span class="key-name">Production</span>" → Variable: Production</div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <strong>Create Comprehensive Format</strong>
+                        <div class="output-preview">🎬 The Dark Knight (2008) - PG-13
+
+⭐ IMDB: 9.0/10 (2,743,876 votes)
+📊 Metacritic: 84/100
+🎭 Genre: Action, Crime, Drama
+⏱️ Runtime: 152 min
+
+👥 Cast: Christian Bale, Heath Ledger, Aaron Eckhart
+🎬 Director: Christopher Nolan
+✍️ Writer: Jonathan Nolan, Christopher Nolan
+
+🌍 Country: United States
+🗣️ Language: English
+🏭 Production: Warner Bros.
+📅 Released: 18 Jul 2008
+💰 Box Office: $534,987,076
+
+🏆 Awards: Won 2 Oscars. 165 wins & 164 nominations total
+
+📖 Plot:
+When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.</div>
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ Note:</strong> This version is quite long. Consider creating multiple shortcut versions for different use cases.
+                </div>
+            </div>
+            
+            <!-- Visual Implementation -->
+            <div class="implementation" id="visual">
+                <h3>📸 Visual Enhanced Version - With Movie Poster</h3>
+                
+                <div class="step-list">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <strong>Add Poster URL Extraction</strong>
+                        <div class="dictionary-keys">
+Dictionary Key: "<span class="key-name">Poster</span>" → Variable: PosterURL</div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <strong>Add "Get Contents of URL" for Poster</strong>
+                        <ul>
+                            <li>URL: Use PosterURL variable</li>
+                            <li>Method: GET</li>
+                            <li>Variable Name: PosterImage</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">3</span>
+                        <strong>Add "Quick Look" Action</strong>
+                        <ul>
+                            <li>Input: PosterImage</li>
+                            <li>This will display the poster before showing text info</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">4</span>
+                        <strong>Continue with Text Output</strong>
+                        <p>Keep your existing text format for movie details</p>
+                    </div>
+                </div>
+                
+                <div class="pro-tip">
+                    <strong>🎨 Visual Experience:</strong> Users will see the movie poster first, then swipe to see detailed information. Great for visual movie discovery!
+                </div>
+            </div>
+            
+            <!-- Ratings Implementation -->
+            <div class="implementation" id="ratings">
+                <h3>📊 Ratings Focus Version - Multiple Rating Sources</h3>
+                
+                <div class="step-list">
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <strong>Add Rating-Focused Fields</strong>
+                        <div class="dictionary-keys">
+Dictionary Key: "<span class="key-name">Metascore</span>" → Variable: Metascore
+Dictionary Key: "<span class="key-name">Awards</span>" → Variable: Awards
+Dictionary Key: "<span class="key-name">Ratings</span>" → Variable: AllRatings (Advanced)</div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <strong>Create Rating-Focused Format</strong>
+                        <div class="output-preview">🎬 The Dark Knight (2008)
+
+📊 RATINGS BREAKDOWN:
+⭐ IMDB: 9.0/10 (2,743,876 votes)
+🍅 Metacritic: 84/100
+🎭 Genre: Action, Crime, Drama ⏱️ 152 min
+
+🏆 AWARDS: Won 2 Oscars. 165 wins & 164 nominations total
+
+🎬 Director: Christopher Nolan
+👥 Stars: Christian Bale, Heath Ledger, Aaron Eckhart
+
+📖 Plot:
+When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.</div>
+                    </div>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⭐</div>
+                        <strong>IMDB Score</strong><br>
+                        Popular rating
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🍅</div>
+                        <strong>Metacritic</strong><br>
+                        Critical consensus
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🏆</div>
+                        <strong>Awards</strong><br>
+                        Recognition & honors
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pro-tip">
+                <strong>🚀 Next Level Ideas:</strong>
+                <ul>
+                    <li><strong>Create Multiple Shortcuts:</strong> One for quick info, one for detailed analysis</li>
+                    <li><strong>Add Conditional Logic:</strong> Show different info based on movie type (action vs drama)</li>
+                    <li><strong>Save Favorites:</strong> Add to Notes app or Reminders for watchlist</li>
+                    <li><strong>Share Results:</strong> Add "Share" action to send movie info to friends</li>
+                    <li><strong>Voice Integration:</strong> "Hey Siri, get detailed movie info" vs "Hey Siri, quick movie lookup"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showVersion(version) {
+            // Hide all implementations
+            document.querySelectorAll('.implementation').forEach(impl => {
+                impl.classList.remove('active');
+            });
+            
+            // Remove active class from all cards
+            document.querySelectorAll('.version-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Show selected implementation
+            document.getElementById(version).classList.add('active');
+            
+            // Add active class to clicked card
+            event.target.closest('.version-card').classList.add('active');
+        }
+    </script>
+</body>
+</html>

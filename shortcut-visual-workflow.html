@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Movie Shortcut - Visual Workflow</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f7;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .workflow {
+            padding: 30px;
+        }
+        
+        .step {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #007AFF;
+            background: #f8f9fa;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #007AFF;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .step-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+        }
+        
+        .step-action {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .step-config {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #007AFF;
+            margin: 10px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        
+        .highlight .step-number {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+        
+        .variable {
+            color: #569cd6;
+            font-weight: bold;
+        }
+        
+        .api-url {
+            color: #ce9178;
+            word-break: break-all;
+        }
+        
+        .output-preview {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            white-space: pre-line;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 iPhone Movie Shortcut</h1>
+            <h2>Visual Workflow Guide</h2>
+        </div>
+        
+        <div class="workflow">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-title">📝 Ask for Input</div>
+                <div class="step-action">Action: Ask for Input</div>
+                <div class="step-config">
+                    <strong>Configuration:</strong><br>
+                    • Input Type: <span class="variable">Text</span><br>
+                    • Prompt: <span class="variable">"Enter movie name"</span><br>
+                    • Allow Multiple Lines: <span class="variable">No</span>
+                </div>
+                <div style="color: #666; font-style: italic;">
+                    This will prompt the user to type a movie name
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">🔗 URL Encode Movie Name</div>
+                <div class="step-action">Action: URL Encode</div>
+                <div class="step-config">
+                    <strong>Configuration:</strong><br>
+                    • Text: <span class="variable">Provided Input (Movie Name)</span><br>
+                    • Encode: <span class="variable">URL</span>
+                </div>
+                <div style="color: #666; font-style: italic;">
+                    This converts spaces and special characters for URL compatibility<br>
+                    Example: "The Dark Knight" → "The%20Dark%20Knight"
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step highlight">
+                <div class="step-number">3</div>
+                <div class="step-title">🌐 Get Contents of URL</div>
+                <div class="step-action">Action: Get Contents of URL</div>
+                <div class="step-config">
+                    <strong>Configuration:</strong><br>
+                    • URL: <div class="code-block"><span class="api-url">http://www.omdbapi.com/?apikey=YOUR_API_KEY&t=</span><span class="variable">URL Encoded Text</span></div>
+                    • Method: <span class="variable">GET</span><br>
+                    • Headers: <span class="variable">None</span>
+                </div>
+                <div style="color: #d73502; font-weight: bold; margin-top: 10px;">
+                    ⚠️ CRITICAL: Don't type [URL Encoded Text] manually!<br>
+                    ✅ Use the variable selector button (🪄) to insert the variable<br>
+                    ❌ Typing brackets causes double encoding: %5B%5D
+                </div>
+                <div style="background: #e8f5e8; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>📱 How to insert variable correctly:</strong><br>
+                    1. Tap in URL field after &t=<br>
+                    2. Tap variable button (magic wand icon)<br>
+                    3. Select "URL Encoded Text" from list<br>
+                    4. Variable appears highlighted in blue
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-title">📊 Extract Movie Data</div>
+                <div class="step-action">Action: Get Value for (Multiple)</div>
+                <div class="step-config">
+                    <strong>Add these "Get Value for" actions:</strong><br><br>
+                    
+                    <div style="display: grid; gap: 10px;">
+                        <div style="background: #e8f5e8; padding: 8px; border-radius: 5px;">
+                            <strong>Title:</strong> Dictionary Key = <span class="variable">"Title"</span>
+                        </div>
+                        <div style="background: #fff3e0; padding: 8px; border-radius: 5px;">
+                            <strong>Rating:</strong> Dictionary Key = <span class="variable">"imdbRating"</span>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 8px; border-radius: 5px;">
+                            <strong>Votes:</strong> Dictionary Key = <span class="variable">"imdbVotes"</span>
+                        </div>
+                        <div style="background: #e1f5fe; padding: 8px; border-radius: 5px;">
+                            <strong>Genre:</strong> Dictionary Key = <span class="variable">"Genre"</span>
+                        </div>
+                        <div style="background: #fce4ec; padding: 8px; border-radius: 5px;">
+                            <strong>Plot:</strong> Dictionary Key = <span class="variable">"Plot"</span>
+                        </div>
+                        <div style="background: #f1f8e9; padding: 8px; border-radius: 5px;">
+                            <strong>Year:</strong> Dictionary Key = <span class="variable">"Year"</span>
+                        </div>
+                        <div style="background: #fafafa; padding: 8px; border-radius: 5px;">
+                            <strong>Runtime:</strong> Dictionary Key = <span class="variable">"Runtime"</span>
+                        </div>
+                        <div style="background: #e8eaf6; padding: 8px; border-radius: 5px;">
+                            <strong>Director:</strong> Dictionary Key = <span class="variable">"Director"</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-title">📝 Format Output</div>
+                <div class="step-action">Action: Text</div>
+                <div class="step-config">
+                    <strong>Text Content:</strong>
+                    <div class="code-block">🎬 <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Title</span> (<span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Year</span>)
+
+⭐ IMDB Rating: <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Rating</span>/10
+👥 Votes: <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Votes</span>
+🎭 Genre: <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Genre</span>
+⏱️ Runtime: <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Runtime</span>
+🎬 Director: <span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Director</span>
+
+📖 Description:
+<span style="background: #4a90e2; color: white; padding: 2px 4px; border-radius: 3px;">Plot</span></div>
+                </div>
+                <div style="color: #d73502; font-weight: bold;">
+                    ⚠️ CRITICAL: Don't type variable names with brackets!<br>
+                    ✅ Use variable selector button to insert each variable<br>
+                    ❌ Typing [Title] manually causes encoding errors
+                </div>
+                <div style="color: #666; font-style: italic;">
+                    Variables should appear as highlighted blue/purple pills, not as text with brackets
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-title">📱 Show Result</div>
+                <div class="step-action">Action: Show Result</div>
+                <div class="step-config">
+                    <strong>Configuration:</strong><br>
+                    • Text: <span class="variable">Formatted Text from Step 5</span>
+                </div>
+                <div class="output-preview">🎬 The Dark Knight (2008)
+
+⭐ IMDB Rating: 9.0/10
+👥 Votes: 2,743,876
+🎭 Genre: Action, Crime, Drama
+⏱️ Runtime: 152 min
+🎬 Director: Christopher Nolan
+
+📖 Description:
+When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.</div>
+            </div>
+            
+            <div style="margin-top: 40px; padding: 20px; background: #f0f8ff; border-radius: 15px;">
+                <h3 style="color: #007AFF; margin-bottom: 15px;">🎯 Quick Tips</h3>
+                <ul style="color: #333; line-height: 1.6;">
+                    <li><strong>Siri Integration:</strong> Add "Get movie info" as Siri phrase</li>
+                    <li><strong>Icon:</strong> Choose a movie/film icon for easy recognition</li>
+                    <li><strong>Testing:</strong> Test with "The Dark Knight", "Titanic", "Avatar"</li>
+                    <li><strong>Error Handling:</strong> Add "If" condition to check for movie not found</li>
+                    <li><strong>Widget:</strong> Add to Home Screen for quick access</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: #fff3cd; border-radius: 15px;">
+                <h3 style="color: #856404; margin-bottom: 15px;">⚠️ Important Notes</h3>
+                <ul style="color: #856404; line-height: 1.6;">
+                    <li>Get your free API key from <a href="http://www.omdbapi.com/apikey.aspx" target="_blank">OMDb API</a></li>
+                    <li>Free tier allows 1000 requests per day</li>
+                    <li>Internet connection required for API calls</li>
+                    <li>Some movies might not be found - try alternative spellings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

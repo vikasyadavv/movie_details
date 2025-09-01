@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Info API Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .form-section {
+            padding: 30px;
+        }
+        
+        .api-key-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .api-key-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .api-key-section p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .movie-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .movie-info {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .info-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            width: 25px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            margin-right: 10px;
+            min-width: 80px;
+        }
+        
+        .info-value {
+            color: #555;
+        }
+        
+        .plot {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+        
+        .plot h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .shortcut-preview {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e8f4fd;
+            border-radius: 15px;
+            border: 2px solid #bee5eb;
+        }
+        
+        .shortcut-preview h3 {
+            color: #0c5460;
+            margin-bottom: 15px;
+        }
+        
+        .shortcut-format {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-line;
+            color: #333;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 Movie Info Tester</h1>
+            <p>Test the OMDb API for your iPhone Shortcut</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="api-key-section">
+                <h3>🔑 API Key Required</h3>
+                <p>Get your free API key from <a href="http://www.omdbapi.com/apikey.aspx" target="_blank">OMDb API</a></p>
+                <div class="input-group">
+                    <label for="apiKey">API Key:</label>
+                    <input type="text" id="apiKey" placeholder="Enter your OMDb API key">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="movieName">Movie Name:</label>
+                <input type="text" id="movieName" placeholder="Enter movie name (e.g., The Dark Knight)" value="The Dark Knight">
+            </div>
+            
+            <button class="search-btn" onclick="searchMovie()">🔍 Search Movie</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Searching for movie...</p>
+            </div>
+            
+            <div class="error" id="error"></div>
+            
+            <div class="result" id="result">
+                <div class="movie-title" id="movieTitle"></div>
+                <div class="movie-info" id="movieInfo"></div>
+                <div class="plot" id="plotSection"></div>
+            </div>
+            
+            <div class="shortcut-preview" id="shortcutPreview" style="display: none;">
+                <h3>📱 iPhone Shortcut Format</h3>
+                <div class="shortcut-format" id="shortcutFormat"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function searchMovie() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const movieName = document.getElementById('movieName').value.trim();
+            
+            if (!apiKey) {
+                showError('Please enter your OMDb API key');
+                return;
+            }
+            
+            if (!movieName) {
+                showError('Please enter a movie name');
+                return;
+            }
+            
+            hideAll();
+            showLoading();
+            
+            try {
+                const response = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&t=${encodeURIComponent(movieName)}`);
+                const data = await response.json();
+                
+                hideLoading();
+                
+                if (data.Response === 'False') {
+                    showError(data.Error || 'Movie not found');
+                    return;
+                }
+                
+                displayMovie(data);
+                showShortcutPreview(data);
+                
+            } catch (error) {
+                hideLoading();
+                showError('Network error. Please check your connection and try again.');
+            }
+        }
+        
+        function displayMovie(movie) {
+            document.getElementById('movieTitle').textContent = `${movie.Title} (${movie.Year})`;
+            
+            const movieInfo = document.getElementById('movieInfo');
+            movieInfo.innerHTML = `
+                <div class="info-item">
+                    <span class="info-icon">⭐</span>
+                    <span class="info-label">Rating:</span>
+                    <span class="info-value">${movie.imdbRating}/10</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">👥</span>
+                    <span class="info-label">Votes:</span>
+                    <span class="info-value">${movie.imdbVotes}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🎭</span>
+                    <span class="info-label">Genre:</span>
+                    <span class="info-value">${movie.Genre}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏱️</span>
+                    <span class="info-label">Runtime:</span>
+                    <span class="info-value">${movie.Runtime}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🎬</span>
+                    <span class="info-label">Director:</span>
+                    <span class="info-value">${movie.Director}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⭐️</span>
+                    <span class="info-label">Rated:</span>
+                    <span class="info-value">${movie.Rated}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📝</span>
+                    <span class="info-label">Writer:</span>
+                    <span class="info-value">${movie.Writer}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🏆</span>
+                    <span class="info-label">Awards:</span>
+                    <span class="info-value">${movie.Awards}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon"></span>
+                    <span class="info-label">Ratings:</span>
+                    <span class="info-value">${movie.Ratings}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🧐</span>
+                    <span class="info-label">Released:</span>
+                    <span class="info-value">${movie.Released}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🕴🏻</span>
+                    <span class="info-label">Actors:</span>
+                    <span class="info-value">${movie.Actors}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🎬</span>
+                    <span class="info-label">Box Office:</span>
+                    <span class="info-value">${movie.BoxOffice}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🎬</span>
+                    <span class="info-label">RunTime:</span>
+                    <span class="info-value">${movie.Runtime}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">📅</span>
+                    <span class="info-label">Released:</span>
+                    <span class="info-value">${movie.Released}</span>
+                </div>
+            `;
+            
+            const plotSection = document.getElementById('plotSection');
+            plotSection.innerHTML = `
+                <h4>📖 Description:</h4>
+                <p>${movie.Plot}</p>
+            `;
+            
+            document.getElementById('result').style.display = 'block';
+        }
+        
+        function showShortcutPreview(movie) {
+            const shortcutFormat = `🎬 ${movie.Title} (${movie.Year})
+
+⭐ IMDB Rating: ${movie.imdbRating}/10
+👥 Votes: ${movie.imdbVotes}
+🎭 Genre: ${movie.Genre}
+⏱️ Runtime: ${movie.Runtime}
+🎬 Director: ${movie.Director}
+
+📖 Description:
+${movie.Plot}`;
+            
+            document.getElementById('shortcutFormat').textContent = shortcutFormat;
+            document.getElementById('shortcutPreview').style.display = 'block';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        function hideAll() {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('shortcutPreview').style.display = 'none';
+        }
+        
+        // Allow Enter key to search
+        document.getElementById('movieName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMovie();
+            }
+        });
+        
+        document.getElementById('apiKey').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('movieName').focus();
+            }
+        });
+    </script>
+</body>
+</html>
